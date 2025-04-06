@@ -24,3 +24,4 @@ router.put("/:id", async (req, res) => {
 router.post("/:id", async (req, res) => {
   console.log("delete method has been called");
 });
+export default router;
