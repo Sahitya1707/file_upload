@@ -22,4 +22,6 @@ const assignmentSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("Submission", assignmentSchema);
+const Assignment = mongoose.model("Assignment", assignmentSchema);
+
+export default Assignment;
