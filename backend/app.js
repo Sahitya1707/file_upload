@@ -18,6 +18,8 @@ app.use(
     methods: "GET, POST, PUT, DELETE, HEAD, OPTIONS",
   })
 );
+// initializing routes
+// app.use("/api/v1/assignments");
 
 // initize ports
 const port = process.env.PORT || 600;
