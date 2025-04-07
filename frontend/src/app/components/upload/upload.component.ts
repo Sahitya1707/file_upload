@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { AssignmentService } from '../../services/assignment/assignment.service';
 
 @Component({
   selector: 'app-upload',
@@ -8,7 +9,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './upload.component.css',
 })
 export class UploadComponent {
-  constructor() {}
+  constructor(private assignmentServie: AssignmentService) {}
   // creating the type for upload
   uploadData: {
     studentName: string;
@@ -48,5 +49,10 @@ export class UploadComponent {
     for (let pair of formData.entries()) {
       console.log(`${pair[0]}:`, pair[1]);
     }
+
+    // posting it to backend
+    this.assignmentServie.uploadAssignment(formData).subscribe((res) => {
+      console.log(res);
+    });
   }
 }

@@ -1,7 +1,8 @@
 import express from "express";
 import Assignment from "../models/assignment.js";
-
+import multer from "multer";
 const router = express.Router();
+const upload = multer(); // https://stackoverflow.com/questions/30654747/parsing-post-form-data-node-js-express
 
 // GET all assignments
 router.get("/", async (req, res) => {
@@ -16,10 +17,12 @@ router.get("/", async (req, res) => {
 });
 
 // POST a new assignment
-router.post("/", async (req, res) => {
+router.post("/", upload.single("file"), async (req, res) => {
   try {
     console.log("✅ POST: New assignment");
+    console.log(req);
     console.log("Body data:", req.body);
+    console.log("file", req.file);
 
     res.status(201).json({ message: "Assignment received!" });
   } catch (error) {

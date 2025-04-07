@@ -5,16 +5,17 @@ const assignmentSchema = new mongoose.Schema(
     studentName: {
       type: String,
       required: true,
-      trim: true,
     },
     title: {
       type: String,
       required: true,
-      trim: true,
     },
     description: {
       type: String,
-      trim: true,
+      required: true,
+    },
+    filename: {
+      type: String,
     },
   },
   {

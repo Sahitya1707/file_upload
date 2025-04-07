@@ -4,12 +4,16 @@ import path from "path";
 import cors from "cors";
 import DBConnection from "./controller/connection.js";
 import assignmentRouting from "./controller/assignment.js";
+
 // creating express app
 const app = express();
 
 DBConnection();
 // it handles parsing for the incoming request mainly bodies
-app.use(bodyParser.json());
+// thisis greate for handling the json
+// app.use(bodyParser.json());
+
+app.use(express.urlencoded({ extended: true }));
 
 // initializing cors
 app.use(
