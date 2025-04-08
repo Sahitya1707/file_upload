@@ -95,14 +95,64 @@ router.get("/:id", async (req, res) => {
 });
 
 // PUT (update) an assignment by ID
-router.put("/:id", async (req, res) => {
+router.put("/:id", upload.single("file"), async (req, res) => {
   try {
     const { id } = req.params;
     console.log(`✅ PUT: Update assignment with ID ${id}`);
 
-    res.status(200).json({ message: `Updated assignment with ID ${id}` });
+    // Find the existing assignment from the database
+    const assignment = await Assignment.findById(id);
+    if (!assignment) {
+      return res.status(404).json({ error: "Assignment not found" });
+    }
+
+    // Extract fields from the form body
+    const { studentName, title, description } = req.body;
+    const file = req.file; // Uploaded file (if provided)
+
+    // Prepare the update object with new text data
+    const updatedData = {
+      studentName,
+      title,
+      description,
+    };
+
+    // If a new file is uploaded, handle deletion of the old file
+    if (file) {
+      const oldFilePath = `uploads/${assignment.filename}`;
+
+      // Delete the old file from disk if it exists
+      // exist sync will check if there is old file or not
+      if (assignment.filename && fs.existsSync(oldFilePath)) {
+        fs.unlinkSync(oldFilePath);
+        console.log(`🗑️ Deleted old file: ${assignment.filename}`);
+      }
+
+      // Add the new file's name to the update data
+      updatedData.filename = file.filename;
+    }
+
+    // Update the assignment in the database
+    const updatedAssignment = await Assignment.findByIdAndUpdate(
+      id,
+      updatedData,
+      {
+        new: true, // Return the updated document
+        runValidators: true, // Ensure model validations run
+      }
+    );
+
+    console.log(`✅ Updated assignment: ${updatedAssignment._id}`);
+
+    // Respond with the updated assignment
+    res.status(200).json({
+      message: "Assignment updated successfully!",
+      data: updatedAssignment,
+    });
   } catch (error) {
     console.error("❌ Error in PUT /:id:", error.message);
+
+    // Send error response
     res.status(500).json({ error: "Failed to update assignment" });
   }
 });

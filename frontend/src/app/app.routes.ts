@@ -3,6 +3,7 @@ import { HomeComponent } from './components/home/home.component';
 import { UploadComponent } from './components/upload/upload.component';
 import { AssignmentListComponent } from './components/assignment-list/assignment-list.component';
 import { SingleItemComponent } from './components/single-item/single-item.component';
+import { EditComponent } from './components/edit/edit.component';
 
 export const routes: Routes = [
   {
@@ -20,5 +21,9 @@ export const routes: Routes = [
   {
     path: 'assignments/:id',
     component: SingleItemComponent,
+  },
+  {
+    path: 'assignments/edit/:id',
+    component: EditComponent,
   },
 ];

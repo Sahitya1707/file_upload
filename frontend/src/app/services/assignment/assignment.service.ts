@@ -27,11 +27,8 @@ export class AssignmentService {
   }
 
   // PUT: Update assignment by ID
-  updateAssignment(assignment: any) {
-    return this.http.put(
-      `${this.apiUrl}/assignments/${assignment._id}`,
-      assignment
-    );
+  updateAssignment(id: string, assignment: any) {
+    return this.http.put(`${this.apiUrl}/assignments/${id}`, assignment);
   }
 
   // DELETE: Delete assignment by ID
