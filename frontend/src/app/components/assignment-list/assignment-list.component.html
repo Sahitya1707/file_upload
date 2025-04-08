@@ -1,0 +1,32 @@
+<table
+    class=" border border-gray-200 divide-y divide-gray-300 shadow-md rounded-lg overflow-hidden w-[80%] my-4 mx-auto   ">
+    <thead class="bg-gray-100 text-gray-700 text-left">
+        <tr>
+            <th class="px-4 py-3 text-sm font-semibold">Student Name</th>
+            <th class="px-4 py-3 text-sm font-semibold">Title</th>
+            <th class="px-4 py-3 text-sm font-semibold">Description</th>
+            <th class="px-4 py-3 text-sm font-semibold">File</th>
+            <th class="px-4 py-3 text-sm font-semibold">View</th>
+        </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-200 bg-white mx-4">
+        <tr *ngFor="let assignment of ASSIGNMENT?.data" class="hover:bg-gray-50">
+
+            <td class="px-4 py-3 text-sm text-gray-800">{{ assignment.studentName }}</td>
+            <td class="px-4 py-3 text-sm text-gray-800">{{ assignment.title }}</td>
+            <td class="px-4 py-3 text-sm text-gray-800">{{ assignment.description }}</td>
+            <td class="px-4 py-3 text-sm text-blue-600">
+                <a *ngIf="assignment.filename" [href]="'http://localhost:3000/uploads/' + assignment.filename"
+                    target="_blank" class="underline hover:text-blue-800 transition">
+                    {{ assignment.filename }}
+                </a>
+                <span *ngIf="!assignment.filename" class="text-gray-500 italic">No file</span>
+            </td>
+            <td>
+                <a [routerLink]="['/assignments', assignment._id]" class="text-blue-600 underline hover:text-blue-800">
+                    View
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>

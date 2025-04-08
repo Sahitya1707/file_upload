@@ -13,7 +13,7 @@ DBConnection();
 // thisis greate for handling the json
 // app.use(bodyParser.json());
 
-app.use(express.urlencoded({ extended: true }));
+// app.use(express.urlencoded({ extended: true }));
 
 // initializing cors
 app.use(
@@ -22,6 +22,8 @@ app.use(
     methods: "GET, POST, PUT, DELETE, HEAD, OPTIONS",
   })
 );
+app.use("/uploads", express.static("uploads"));
+
 // initializing routes
 app.use("/api/v1/assignments", assignmentRouting);
 

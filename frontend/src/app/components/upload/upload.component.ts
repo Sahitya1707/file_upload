@@ -33,6 +33,14 @@ export class UploadComponent {
       console.log('Selected file:', file);
     }
   }
+  clearForm(): void {
+    this.uploadData = {
+      studentName: '',
+      title: '',
+      description: '',
+    };
+    this.selectedFile = null;
+  }
 
   // creating a function that is needed to submit data
   onSubmit(): void {
@@ -53,6 +61,9 @@ export class UploadComponent {
     // posting it to backend
     this.assignmentServie.uploadAssignment(formData).subscribe((res) => {
       console.log(res);
+      if (res) {
+        this.clearForm();
+      }
     });
   }
 }
