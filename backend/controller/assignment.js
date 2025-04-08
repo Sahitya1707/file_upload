@@ -2,6 +2,7 @@ import express from "express";
 import Assignment from "../models/assignment.js";
 import multer from "multer";
 import path from "path";
+import fs from "fs";
 const router = express.Router();
 
 // Setup disk storage to save file in uploads/ folder
@@ -81,7 +82,12 @@ router.get("/:id", async (req, res) => {
     const { id } = req.params;
     console.log(`✅ GET: Assignment with ID ${id}`);
 
-    res.status(200).json({ message: `Fetched assignment with ID ${id}` });
+    const assignment = await Assignment.findById(id);
+    if (!assignment) {
+      return res.status(404).json({ error: "Assignment not found" });
+    }
+
+    res.status(200).json(assignment);
   } catch (error) {
     console.error("❌ Error in GET /:id:", error.message);
     res.status(500).json({ error: "Failed to fetch assignment" });
@@ -106,8 +112,29 @@ router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     console.log(`✅ DELETE: Delete assignment with ID ${id}`);
+    const assignment = await Assignment.findById(id);
+    if (!assignment) {
+      return res.status(404).json({ error: "Assignment not found" });
+    }
 
-    res.status(200).json({ message: `Deleted assignment with ID ${id}` });
+    // Simple file delete using just filename
+    if (assignment.filename) {
+      const filePath = `uploads/${assignment.filename}`;
+
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+        console.log(`🗑️ File deleted: ${assignment.filename}`);
+      } else {
+        console.warn(`⚠️ File not found: ${filePath}`);
+      }
+    }
+
+    await Assignment.findByIdAndDelete(id);
+    console.log(`✅ Deleted assignment with ID ${id}`);
+
+    res
+      .status(200)
+      .json({ message: "Assignment and associated file deleted." });
   } catch (error) {
     console.error("❌ Error in DELETE /:id:", error.message);
     res.status(500).json({ error: "Failed to delete assignment" });
